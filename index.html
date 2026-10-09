@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data-to-Value Execution Canvas</title>
+<style>
+:root{--navy:#12365a;--teal:#07856f;--pale:#f2f7fa;--line:#d8e3ea;--ink:#203040;--muted:#5e6e7c}
+*{box-sizing:border-box}body{margin:0;background:#eef3f6;color:var(--ink);font:16px/1.45 Arial,Helvetica,sans-serif}
+main{max-width:1000px;margin:28px auto;padding:0 16px}.shell{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px #18344a12}
+header{padding:28px 30px;background:linear-gradient(120deg,#10365a,#087b70);color:#fff}header h1{margin:0 0 8px;font-size:clamp(25px,4vw,36px);line-height:1.1}header p{margin:0;color:#e6f4f3;max-width:700px}
+.content{padding:24px 30px 30px}.section-title{font-size:17px;color:var(--navy);margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-weight:700;font-size:13px;color:#354b5d}
+input,select,textarea{width:100%;font:inherit;border:1px solid #c8d5de;border-radius:9px;padding:10px 12px;background:#fff;color:var(--ink)}textarea{min-height:72px;resize:vertical}input:focus,select:focus,textarea:focus{outline:2px solid #78cfc0;border-color:var(--teal)}
+hr{border:0;border-top:1px solid var(--line);margin:25px 0}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0 8px}.metric{background:var(--pale);border:1px solid var(--line);border-radius:12px;padding:15px}.metric .k{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}.metric .v{font-size:clamp(21px,3vw,29px);font-weight:800;color:var(--teal);margin-top:5px}.metric small{color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:14px}button.primary{background:var(--teal);color:white}button.secondary{background:#eaf1f5;color:var(--navy)}button:hover{filter:brightness(.97)}
+.note{font-size:12px;color:var(--muted);margin-top:16px}.status{display:inline-block;padding:4px 9px;border-radius:999px;background:#eaf7f3;color:#08735f;font-weight:700;font-size:12px}
+@media(max-width:650px){.content{padding:20px 16px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.metrics{grid-template-columns:1fr}.metric{display:flex;align-items:center;justify-content:space-between;gap:10px}.metric .v{margin:0}header{padding:24px 18px}}
+</style>
+</head>
+<body>
+<main><div class="shell">
+<header>
+  <h1>Data-to-Value Execution Canvas</h1>
+  <p>Turn an operational insight into a measurable improvement plan. Edit the example, see the potential impact, and copy your action brief.</p>
+</header>
+<div class="content">
+  <h2 class="section-title">1 · Define the opportunity</h2>
+  <div class="grid">
+    <div class="field full"><label for="process">Process / problem</label><input id="process" value="Repeat testing and rework"></div>
+    <div class="field"><label for="kpi">Key performance indicator (KPI)</label><input id="kpi" value="Repeat-test rate"></div>
+    <div class="field"><label for="owner">Accountable owner</label><input id="owner" value="Operations Manager"></div>
+    <div class="field"><label for="baseline">Current rate (%)</label><input id="baseline" type="number" min="0" max="100" step="0.1" value="12"></div>
+    <div class="field"><label for="target">Target rate (%)</label><input id="target" type="number" min="0" max="100" step="0.1" value="5"></div>
+    <div class="field"><label for="volume">Monthly volume (items)</label><input id="volume" type="number" min="0" step="1" value="500"></div>
+    <div class="field"><label for="cost">Cost per repeat ($)</label><input id="cost" type="number" min="0" step="0.01" value="35"></div>
+  </div>
+  <div class="metrics" aria-live="polite">
+    <div class="metric"><div><div class="k">Repeats avoided / month</div><small>At target performance</small></div><div class="v" id="avoided">35</div></div>
+    <div class="metric"><div><div class="k">Potential savings / month</div><small>Gross estimate</small></div><div class="v" id="monthly">$1,225</div></div>
+    <div class="metric"><div><div class="k">Potential savings / year</div><small>Before implementation costs</small></div><div class="v" id="annual">$14,700</div></div>
+  </div>
+  <hr>
+  <h2 class="section-title">2 · Convert insight into execution</h2>
+  <div class="grid">
+    <div class="field full"><label for="cause">Likely root cause</label><textarea id="cause">Inconsistent sample preparation and unclear acceptance criteria</textarea></div>
+    <div class="field full"><label for="action">First actions</label><textarea id="action">Standardize SOPs, introduce in-process quality checks, and train operators</textarea></div>
+    <div class="field"><label for="due">Review date</label><input id="due" type="date"></div>
+    <div class="field"><label for="status">Execution status</label><select id="status"><option>Not started</option><option>In progress</option><option>Blocked</option><option>Completed</option></select></div>
+    <div class="field full"><label for="proof">How will the outcome be verified?</label><textarea id="proof">Track weekly repeat-test rate and compare the 30-day result with the baseline</textarea></div>
+  </div>
+  <div class="actions">
+    <button class="primary" id="copy">Copy action brief</button>
+    <button class="secondary" id="reset">Reset example</button>
+  </div>
+  <p class="note">Illustrative planning tool, not a validated financial forecast. Savings assume the monthly volume and cost per repeat remain constant; actual results depend on implementation, behavior change, and verification.</p>
+</div></div></main>
+<script>
+const ids=['process','kpi','owner','baseline','target','volume','cost','cause','action','due','status','proof'];
+const initial={process:'Repeat testing and rework',kpi:'Repeat-test rate',owner:'Operations Manager',baseline:'12',target:'5',volume:'500',cost:'35',cause:'Inconsistent sample preparation and unclear acceptance criteria',action:'Standardize SOPs, introduce in-process quality checks, and train operators',due:'',status:'Not started',proof:'Track weekly repeat-test rate and compare the 30-day result with the baseline'};
+const $=id=>document.getElementById(id);
+const number=id=>{const v=parseFloat($(id).value);return Number.isFinite(v)?v:0};
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
+function calc(){
+ const baseline=Math.max(0,Math.min(100,number('baseline'))),target=Math.max(0,Math.min(100,number('target')));
+ const avoided=Math.max(0,(baseline-target)/100*Math.max(0,number('volume')));
+ const monthly=avoided*Math.max(0,number('cost'));
+ $('avoided').textContent=avoided.toLocaleString('en-US',{maximumFractionDigits:1});
+ $('monthly').textContent=money(monthly);$('annual').textContent=money(monthly*12);
+}
+ids.forEach(id=>$(id).addEventListener('input',calc));
+$('copy').addEventListener('click',async()=>{
+ const b=`DATA-TO-VALUE ACTION BRIEF\n\nOpportunity: ${$('process').value}\nKPI: ${$('kpi').value}\nOwner: ${$('owner').value}\nBaseline: ${$('baseline').value}% | Target: ${$('target').value}%\nMonthly volume: ${$('volume').value}\nEstimated repeats avoided/month: ${$('avoided').textContent}\nEstimated gross savings/month: ${$('monthly').textContent}\nEstimated gross savings/year: ${$('annual').textContent}\n\nLikely root cause: ${$('cause').value}\nFirst actions: ${$('action').value}\nReview date: ${$('due').value||'Not set'}\nStatus: ${$('status').value}\nOutcome verification: ${$('proof').value}\n\nNote: Illustrative estimate; validate assumptions and actual results.`;
+ try{await navigator.clipboard.writeText(b);$('copy').textContent='Copied!';setTimeout(()=>$('copy').textContent='Copy action brief',1800)}
+ catch(e){const ta=document.createElement('textarea');ta.value=b;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();$('copy').textContent='Copied!';setTimeout(()=>$('copy').textContent='Copy action brief',1800)}
+});
+$('reset').addEventListener('click',()=>{ids.forEach(id=>{if(id==='status')$(id).value=initial[id];else $(id).value=initial[id]});calc()});
+calc();
+</script>
+</body></html>
